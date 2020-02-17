@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "question")
@@ -47,6 +49,9 @@ public class QuestionEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private UsersEntity user;
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<AnswerEntity> answers = new ArrayList<>();
+
     public Integer getId() {
         return id;
     }
@@ -85,5 +90,13 @@ public class QuestionEntity {
 
     public void setUser(UsersEntity user) {
         this.user = user;
+    }
+
+    public List<AnswerEntity> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<AnswerEntity> answers) {
+        this.answers = answers;
     }
 }
