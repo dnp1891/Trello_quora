@@ -9,6 +9,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"userName", "email"})})
@@ -84,6 +86,11 @@ public class UsersEntity implements Serializable {
     @Size(max = 30)
     private String contactNumber;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<QuestionEntity> questions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<AnswerEntity> answers = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -187,6 +194,23 @@ public class UsersEntity implements Serializable {
 
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
+    }
+
+
+    public List<QuestionEntity> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<QuestionEntity> questions) {
+        this.questions = questions;
+    }
+
+    public List<AnswerEntity> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<AnswerEntity> answers) {
+        this.answers = answers;
     }
 
     @Override

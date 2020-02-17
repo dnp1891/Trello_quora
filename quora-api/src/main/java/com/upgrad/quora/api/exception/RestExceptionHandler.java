@@ -25,6 +25,17 @@ public class RestExceptionHandler {
                 HttpStatus.CONFLICT);
     }
 
+
+    @ExceptionHandler(AuthorizationFailedException.class)
+    public ResponseEntity<ErrorResponse> authorizationFailedException(AuthorizationFailedException exc , WebRequest request){
+
+        return new ResponseEntity<ErrorResponse>(new ErrorResponse()
+                .code(exc.getCode())
+                .message(exc.getErrorMessage()),
+                HttpStatus.FORBIDDEN);
+    }
+
+
     @ExceptionHandler(AuthenticationFailedException.class)
     public ResponseEntity<ErrorResponse> authenticationFailedException(AuthenticationFailedException exc, WebRequest request) {
         return new ResponseEntity<ErrorResponse>(new ErrorResponse()
@@ -40,12 +51,7 @@ public class RestExceptionHandler {
                 .message(exc.getErrorMessage()),
                 HttpStatus.UNAUTHORIZED);
     }
-
-    /*
-     * *createdBy aiwalia
-     * User Not Found ExceptionHandler for when user is not found for common getUser.
-     *
-     * */
+    
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> userNotFoundException(UserNotFoundException exc, WebRequest request) {
         return new ResponseEntity<ErrorResponse>(
@@ -54,19 +60,12 @@ public class RestExceptionHandler {
                         .message(exc.getErrorMessage()),
                 HttpStatus.NOT_FOUND);
     }
-    /*
-     * *createdBy aiwalia
-     * Authorization ExceptionHandler for when user is not found for common getUser.
-     *
-     * */
 
-    @ExceptionHandler(AuthorizationFailedException.class)
-    public ResponseEntity<ErrorResponse> authorizationFailedException(AuthorizationFailedException exc, WebRequest request) {
-
+    @ExceptionHandler(AnswerNotFoundException.class)
+    public ResponseEntity<ErrorResponse> answerNotFoundException(AnswerNotFoundException exc, WebRequest request){
         return new ResponseEntity<ErrorResponse>(new ErrorResponse()
                 .code(exc.getCode())
                 .message(exc.getErrorMessage()),
-                HttpStatus.FORBIDDEN);
+                HttpStatus.NOT_FOUND);
     }
-
 }
