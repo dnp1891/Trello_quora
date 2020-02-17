@@ -7,6 +7,7 @@ import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.AnswerEntity;
 import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthEntity;
+import com.upgrad.quora.service.exception.AnswerNotFoundException;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.InvalidQuestionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,31 @@ public class AnswerBusinessService {
         answerDao.createAnswer(answerEntity);
 
         return answerEntity;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public AnswerEntity editAnswerContent(AnswerEntity answerEntity, final  String answerId, final String authorizationToken) throws AuthorizationFailedException, AnswerNotFoundException {
+        UserAuthEntity userAuthEntity = userAuthDao.getAuthToken(authorizationToken);
+        if (userAuthEntity == null) {
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+        }
+        if (userAuthEntity.getLogoutAt() != null) {
+            throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post a question");
+        }
+
+        AnswerEntity answerEntityByUuid = answerDao.getAnswerByUuid(answerId);
+        if (answerEntityByUuid == null) {
+            throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
+        }
+        if (userAuthEntity.getUser() != answerEntityByUuid.getUser()) {
+            throw new AuthorizationFailedException("ATHR-003", "Only the answer owner can edit the answer");
+        }
+        answerEntity.setId(answerEntityByUuid.getId());
+        answerEntity.setDate(answerEntityByUuid.getDate());
+        answerEntity.setQuestion(answerEntityByUuid.getQuestion());
+        answerEntity.setUser(answerEntityByUuid.getUser());
+
+        return answerDao.editAnswerContent(answerEntity);
     }
 
 }
