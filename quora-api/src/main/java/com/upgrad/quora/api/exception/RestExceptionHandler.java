@@ -41,5 +41,32 @@ public class RestExceptionHandler {
                 HttpStatus.UNAUTHORIZED);
     }
 
+    /*
+     * *createdBy aiwalia
+     * User Not Found ExceptionHandler for when user is not found for common getUser.
+     *
+     * */
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> userNotFoundException(UserNotFoundException exc, WebRequest request) {
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse()
+                        .code(exc.getCode())
+                        .message(exc.getErrorMessage()),
+                HttpStatus.NOT_FOUND);
+    }
+    /*
+     * *createdBy aiwalia
+     * Authorization ExceptionHandler for when user is not found for common getUser.
+     *
+     * */
+
+    @ExceptionHandler(AuthorizationFailedException.class)
+    public ResponseEntity<ErrorResponse> authorizationFailedException(AuthorizationFailedException exc, WebRequest request) {
+
+        return new ResponseEntity<ErrorResponse>(new ErrorResponse()
+                .code(exc.getCode())
+                .message(exc.getErrorMessage()),
+                HttpStatus.FORBIDDEN);
+    }
 
 }
