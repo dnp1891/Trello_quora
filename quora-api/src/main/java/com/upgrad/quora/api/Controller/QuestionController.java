@@ -32,7 +32,7 @@ public class QuestionController {
     private QuestionBusinessService questionBusinessService;
 
     /**
-     * This method implement's the Question endpoint. This method gets the Object of type QuestionRequest
+     * This method implement's the Question endpoint createQuestion. This method gets the Object of type QuestionRequest
      * and converts into the QuestionEntity object. Then it goes to the service method for creating a new Question.
      * Once it receives the response it create the QuestionResponse object that is to be sent in
      * the Response Body.
@@ -73,7 +73,12 @@ public class QuestionController {
 
     }
 
-
+    /**
+     * This method implement's the Question endpoint editQuestionContent. This method gets the Object of type QuestionRequest
+     * and converts into the QuestionEntity object. Then it goes to the service method for editing a Question.
+     * Once it receives the response it create the QuestionResponse object that is to be sent in
+     * the Response Body.
+     */
     @RequestMapping(path = "/question/edit/{questionId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionEditResponse> editQuestionContent  (QuestionEditRequest questionEditRequest , @RequestHeader("authorization") final String authorization, @PathVariable("questionId") final String questionId) throws AuthorizationFailedException, InvalidQuestionException {
         QuestionEntity questionEntity = new QuestionEntity();
@@ -83,7 +88,13 @@ public class QuestionController {
         QuestionEditResponse questionEditResponse = new QuestionEditResponse().id(editQuestionEntity.getUuid()).status("QUESTION EDITED");
         return new ResponseEntity<QuestionEditResponse>(questionEditResponse, HttpStatus.OK);
     }
-
+    
+    /**
+     * This method implement's the Question endpoint deleteQuestion. This method gets the Object of type QuestionRequest
+     * and converts into the QuestionEntity object. Then it goes to the service method for deleting a Question.
+     * Once it receives the response it create the QuestionResponse object that is to be sent in
+     * the Response Body.
+     */
     @RequestMapping(path = "/question/delete/{questionId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionDeleteResponse> deleteQuestion   (@RequestHeader("authorization") final String authorization, @PathVariable("questionId") final String questionId) throws AuthorizationFailedException, InvalidQuestionException {
         QuestionEntity questionEntity = new QuestionEntity();
