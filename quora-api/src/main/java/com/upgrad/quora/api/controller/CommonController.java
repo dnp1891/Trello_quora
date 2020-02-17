@@ -20,7 +20,7 @@ public class CommonController {
     private CommonBusinessService commonBusinessService;
 
     @RequestMapping(method = RequestMethod.GET, path = "/userprofile/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UserDetailsResponse> getUserDetails(@PathVariable("userId") final String uuid)
+    public ResponseEntity<UserDetailsResponse> getUserDetails(@PathVariable("id") final String uuid)
     {
         final UsersEntity usersEntity = commonBusinessService.getUser(uuid);
          UserDetailsResponse userDetailsResponse = new UserDetailsResponse()
