@@ -30,4 +30,9 @@ public class AnswerDao {
     public AnswerEntity editAnswerContent(AnswerEntity answerEntity) {
         return entityManager.merge(answerEntity);
     }
+
+    public AnswerEntity deleteAnswer(AnswerEntity answerEntity) {
+        entityManager.remove(answerEntity);
+        return answerEntity;
+    }
 }
